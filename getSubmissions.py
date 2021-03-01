@@ -2,22 +2,16 @@ import codepost
 import csv
 import random
 codepost.configure_api_key("4c94d9d338cefd5e8e08ec3cef7a93f011ebb8bd")
-#print(codepost.course.list_available())
-
-def getCourse(name, period):
-    # select course according to name and period
-    course = codepost.course.list_available()[1]
-    return course
-
-def getAssignment(course, name):
-    return course.assignments.by_name('Hello World')
+ASSIGNMENT_NAME = 'Hello'
 
 if __name__ == "__main__":
+    # COS126 S2021
     course = codepost.course.list_available()[1]
     roster = codepost.roster.retrieve(id = course.id)
     graders = roster.graders
-    assignment = course.assignments.by_name('Hello')
+    assignment = course.assignments.by_name(ASSIGNMENT_NAME)
 
+    # For each grader, randomly select a submission and output as a list
     selected_submissions = []
     for grader in graders:
         submission_link = 'https://codepost.io/code/'
@@ -30,7 +24,8 @@ if __name__ == "__main__":
             selected_submissions.append(submission_link)
         else: selected_submissions.append(submission_link)
 
-    with open('File.csv', 'w', newline='') as csvfile:
+    # Write to a csv file
+    with open('graders/' + ASSIGNMENT_NAME + '_grader.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(['', 'Assignment Viewed', 'All rubric comments correctly applied', 'No application of a rubric comment was missing', 'No custom comment was a rubric comment', 'Notes'])
         num_graders = len(graders)
